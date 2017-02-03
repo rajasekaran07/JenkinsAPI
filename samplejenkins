@@ -1,0 +1,32 @@
+curl -X POST http://developer:developer@localhost:8080/job/test/config.xml --data-binary "@mymodifiedlocalconfig.xml"
+
+curl -X POST http://admin:T3st!0007@54.153.38.213:8080/job/my-testing/config.xml --data-binary "@config.xml"
+
+
+CRUMB=$(curl -s 'http://admin:T3st!0007@54.153.38.213:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+
+wget -q --output-document - \
+'http://54.153.38.213:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+
+curl -X POST -H "Content-Type:application/xml" -d "<project><builders/><publishers/><buildWrappers/></project>" "http://my.jenkins.com/createItem?name=AA_TEST_JOB2"
+ * curl -X POST -H "Content-Type:application/xml" -d @config.xml "http://my.jenkins.com/createItem?name=AA_TEST_JOB3" 
+ 
+ -H ".crumb: e9421b7d684552b3a83591aa8d736aae"
+ 
+curl -X POST 'http://admin:T3st!0007@54.153.38.213:8080/jenkins/crumbIssuer/api/xml | sed -n 's/.*<crumb>\(.*\)<\/crumb>.*/\1/p' > crumb.txt
+
+curl 'http://admin:T3st!000754.153.38.213/:8080/jenkins/view/my-test-view/config.xml'
+	
+curl http://localhost:8080/view/my-test-view/config.xml -u admin:e973b7863cb025579acaf2cd7eb76094
+curl -vvv -X POST -d @viewconfig.xml -H "Content-Type: text/xml" http://localhost:8080/jenkins/createView?name=My-Test-View -u admin:e973b7863cb025579acaf2cd7eb76094
+
+curl -X POST 'http://admin:T3st!0007@localhost:8080/jenkins/createView?name=My-Test-View' --data-binary @viewconfig.xml -H "Content-Type: text/xml"
+
+
+curl -X POST 'http://IP-ADDRESS/createItem?name=my-test-shelter-clean' --data-binary "@dev-shelter-clean.xml" -H "Content-Type: text/xml" -u $1:$2;
+
+curl -X POST 'http://IP-ADDRESS/createItem?name=my-test-shelter-build' --data-binary "@dev-shelter-build.xml" -H "Content-Type: text/xml" -u $1:$2;
+
+curl -X POST 'http://IP-ADDRESS/createItem?name=my-test-shelter-test' --data-binary "@dev-shelter-test.xml" -H "Content-Type: text/xml" -u $1:$2;
+
+curl -X POST 'http://IP-ADDRESS/createItem?name=my-test-shelter-deploy' --data-binary "@dev-shelter-deploy.xml" -H "Content-Type: text/xml" -u $1:$2;
